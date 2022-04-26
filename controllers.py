@@ -40,3 +40,11 @@ def index():
         # COMPLETE: return here any signed URLs you need.
         my_callback_url = URL('my_callback', signer=url_signer),
     )
+
+@action('my_callback')
+@action.uses(url_signer.verify())
+def my_callback():
+    return dict(birds=[
+        dict(name="Dark-Eyed Junco", count=2),
+        dict(name="Oak Titmouse", count=3),
+    ])
