@@ -10,6 +10,7 @@ let init = (app) => {
     // This is the Vue data.
     app.data = {
         // Complete as you see fit.
+        birds: [],
     };
 
     app.enumerate = (a) => {
@@ -36,6 +37,9 @@ let init = (app) => {
     app.init = () => {
         // Put here any initialization code.
         // Typically this is a server GET call to load the data.
+        // Initially, we produce synthetic data.
+        app.vue.birds = [{name: "Spotted Towhee", count: 7}];
+        app.enumerate(app.vue.birds);
     };
 
     // Call to the initializer.

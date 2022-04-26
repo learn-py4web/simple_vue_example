@@ -15,13 +15,13 @@
         <tr><th></th><th>Count</th><th>Bird</th></tr>
       </thead>
       <tbody>
-        <tr>
+        <tr v-for="bird in birds">
           <td>
             <i class="fa fa-fw fa-plus-circle"></i>
             <i class="fa fa-fw fa-minus-circle"></i>
           </td>
-          <td>4</td>
-          <td>California Towhee</td>
+          <td>{{bird.count}}</td>
+          <td>{{bird.name}}</td>
         </tr>
       </tbody>
     </table>
