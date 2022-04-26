@@ -24,6 +24,11 @@ let init = (app) => {
         // This increments the count.
         let b = app.vue.birds[bird_idx];
         b.count = Math.max(0, b.count + parseInt(inc_amount));
+        // We tell the server the update.
+        axios.post(my_post_url, b).then(function (response) {
+            // We log the ok, simply for fun.
+            console.log(response);
+        })
     };
 
     // This contains all the methods.

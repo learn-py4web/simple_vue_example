@@ -39,6 +39,7 @@ def index():
     return dict(
         # COMPLETE: return here any signed URLs you need.
         my_callback_url = URL('my_callback', signer=url_signer),
+        my_post_url = URL('my_post', signer=url_signer)
     )
 
 @action('my_callback')
@@ -48,3 +49,12 @@ def my_callback():
         dict(name="Dark-Eyed Junco", count=2),
         dict(name="Oak Titmouse", count=3),
     ])
+
+@action('my_post', method="POST")
+@action.uses(url_signer.verify())
+def my_post():
+    # The decoded json is available in request.json
+    print("I received:", request.json)
+    # You can return anything, but I like to return "ok" if nothing
+    # special is needed.
+    return "ok"
