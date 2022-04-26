@@ -17,8 +17,8 @@
       <tbody>
         <tr v-for="bird in birds">
           <td>
-            <i class="fa fa-fw fa-plus-circle"></i>
-            <i class="fa fa-fw fa-minus-circle"></i>
+            <i @click="inc_count(bird._idx, 1)" class="fa fa-fw fa-plus-circle"></i>
+            <i @click="inc_count(bird._idx, -1)" class="fa fa-fw fa-minus-circle"></i>
           </td>
           <td>{{bird.count}}</td>
           <td>{{bird.name}}</td>

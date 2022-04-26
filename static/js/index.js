@@ -20,10 +20,16 @@ let init = (app) => {
         return a;
     };
 
+    app.inc_count = function (bird_idx, inc_amount) {
+        // This increments the count.
+        let b = app.vue.birds[bird_idx];
+        b.count += parseInt(inc_amount);
+    };
 
     // This contains all the methods.
     app.methods = {
         // Complete as you see fit.
+        inc_count: app.inc_count,
     };
 
     // This creates the Vue instance.
