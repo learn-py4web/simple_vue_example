@@ -23,7 +23,7 @@ let init = (app) => {
     app.inc_count = function (bird_idx, inc_amount) {
         // This increments the count.
         let b = app.vue.birds[bird_idx];
-        b.count += parseInt(inc_amount);
+        b.count = Math.max(0, b.count + parseInt(inc_amount));
     };
 
     // This contains all the methods.
