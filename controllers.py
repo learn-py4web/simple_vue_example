@@ -36,7 +36,7 @@ url_signer = URLSigner(session)
 @action('setup')
 @action.uses(db)
 def setup():
-    db(db.birds.ALL).delete()
+    db(db.birds).delete()
     db.birds.insert(bird_name="Spotted Towhee")
     db.birds.insert(bird_name="Bewick's Wren")
 
