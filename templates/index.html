@@ -15,6 +15,13 @@
         <tr><th></th><th>Count</th><th>Bird</th></tr>
       </thead>
       <tbody>
+        <tr>
+          <td></td>
+          <td>
+            <input type="text" v-model="new_bird_name" class="input">
+            <button class="button" @click="create_bird"><i class="fa fa-plus"></i></button>
+          </td>
+        </tr>
         <tr v-for="bird in birds">
           <td>
             <i @click="inc_count(bird._idx, 1)" class="fa fa-fw fa-plus-circle"></i>

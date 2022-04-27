@@ -11,6 +11,7 @@ let init = (app) => {
     app.data = {
         // Complete as you see fit.
         birds: [],
+        new_bird_name: "",
     };
 
     app.enumerate = (a) => {
@@ -31,10 +32,20 @@ let init = (app) => {
         })
     };
 
+    app.create_bird = function () {
+        // Before I can add the bird to the list, I need to send it
+        // to the server to be inserted so that it gets an id.
+        axios.post(add_bird_url, {bird_name: new_bird_name}).then(function (response) {
+
+        });
+
+    }
+
     // This contains all the methods.
     app.methods = {
         // Complete as you see fit.
         inc_count: app.inc_count,
+        create_bird: app.create_bird,
     };
 
     // This creates the Vue instance.
