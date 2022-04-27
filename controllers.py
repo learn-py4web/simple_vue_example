@@ -33,6 +33,13 @@ from .models import get_user_email
 
 url_signer = URLSigner(session)
 
+@action('setup')
+@action.uses(db)
+def setup():
+    db(db.birds.ALL).delete()
+    db.birds.insert(bird_name="Spotted Towhee")
+    db.birds.insert(bird_name="Bewick's Wren")
+
 @action('index')
 @action.uses('index.html', db, url_signer, auth)
 def index():
@@ -43,18 +50,19 @@ def index():
     )
 
 @action('my_callback')
-@action.uses(url_signer.verify())
+@action.uses(db, url_signer.verify())
 def my_callback():
-    return dict(birds=[
-        dict(name="Dark-Eyed Junco", count=2),
-        dict(name="Oak Titmouse", count=3),
-    ])
+    birds=db().select(db.birds.ALL)
+    return dict(birds=[{"id": b.id, "count": b.bird_count, "name": b.bird_name}
+                       for b in birds])
 
 @action('my_post', method="POST")
-@action.uses(url_signer.verify())
+@action.uses(db, url_signer.verify())
 def my_post():
     # The decoded json is available in request.json
     print("I received:", request.json)
+    # Update the database.
+    db(db.birds.id == request.json["id"]).update(bird_count=request.json["count"])
     # You can return anything, but I like to return "ok" if nothing
     # special is needed.
     return "ok"

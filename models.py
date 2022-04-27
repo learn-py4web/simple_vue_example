@@ -20,4 +20,9 @@ def get_time():
 #
 ## always commit your models to avoid problems later
 
+db.define_table('birds',
+                Field('bird_name'),
+                Field('bird_count', 'integer', default=0),
+                )
+
 db.commit()
