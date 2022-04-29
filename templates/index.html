@@ -25,8 +25,8 @@
         </tr>
         <tr v-for="bird in birds">
           <td>
-            <i @click="inc_count(bird._idx, 1)" class="fa fa-fw fa-plus-circle"></i>
-            <i @click="inc_count(bird._idx, -1)" class="fa fa-fw fa-minus-circle"></i>
+            <button :disabled="!bird.id" @click="inc_count(bird._idx, 1)"><i class="fa fa-fw fa-plus-circle"></i></button>
+            <button :disabled="!bird.id" @click="inc_count(bird._idx, -1)"><i class="fa fa-fw fa-minus-circle"></i></button>
           </td>
           <td>{{bird.count}}</td>
           <td>{{bird.name}}</td>

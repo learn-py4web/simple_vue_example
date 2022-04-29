@@ -74,7 +74,7 @@ def my_post():
 @action('add_bird', method="POST")
 @action.uses(db, url_signer.verify())
 def add_bird():
-    time.sleep(1)
+    time.sleep(10)
     print("Adding bird:", request.json["bird_name"])
     bird_id = db.birds.insert(bird_name=request.json["bird_name"])
     return dict(
