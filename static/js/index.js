@@ -65,7 +65,10 @@ let init = (app) => {
                     console.log(bb.bird_counter, response.data.bird_counter);
                     if (bb.bird_counter === response.data.bird_counter) {
                         console.log("Found the bird");
-                        bb.id = response.data.bird_id;
+                        // NONO poor Vue will not be able to keep surveillance on id.
+                        // This because id has been added AFTER the bird is in the array.
+                        // bb.id = response.data.bird_id;
+                        Vue.set(bb, "id", response.data.bird_id);
                         bb.bird_counter = null;
                     }
                 }
