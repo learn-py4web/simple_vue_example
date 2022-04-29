@@ -14,6 +14,8 @@ let init = (app) => {
         new_bird_name: "",
     };
 
+    app.bird_counter = 0;
+
     app.enumerate = (a) => {
         // This adds an _idx field to each element of the array.
         let k = 0;
@@ -24,34 +26,50 @@ let init = (app) => {
     app.inc_count = function (bird_idx, inc_amount) {
         // This increments the count.
         let b = app.vue.birds[bird_idx];
-        b.count = Math.max(0, b.count + parseInt(inc_amount));
-        // We tell the server the update.
-        axios.post(my_post_url, b).then(function (response) {
-            // We log the ok, simply for fun.
-            console.log(response);
-        })
+        // I inc it only if the bird already has a db id.
+        if (b.id) {
+            b.count = Math.max(0, b.count + parseInt(inc_amount));
+            // We tell the server the update.
+            axios.post(my_post_url, b).then(function (response) {
+                // We log the ok, simply for fun.
+                console.log(response);
+            })
+        }
     };
 
     app.create_bird = function () {
         // new_bird_name is the name of the new bird.
         // Before I can add the bird to the list, I need to send it
         // to the server to be inserted so that it gets an id.
-        axios.post(add_bird_url, {bird_name: app.vue.new_bird_name}).then(
-            function (response) {
-                // I create a bird object that I can insert in the bird list.
-                let b = {
-                    id: response.data.bird_id,
-                    name: app.vue.new_bird_name,
-                    count: 0,
-                }
-                // I insert it at the top of the list of bird.
-                app.vue.birds.unshift(b);
-                // I have to re-create the _idx attribute.
-                app.enumerate(app.vue.birds);
-                // Clear the input field now that the bird is added.
-                app.vue.new_bird_name = "";
-            });
 
+        // THIS happens at button press time.
+        // I want to create a temporary bird w/o id, and put it in the list.
+        let b = {
+            name: app.vue.new_bird_name,
+            count: 0,
+            bird_counter: app.bird_counter,
+        };
+        app.bird_counter += 1;
+        app.vue.birds.unshift(b);
+        app.enumerate(app.vue.birds);
+        app.vue.new_bird_name = ""; // Clear it now.
+        axios.post(add_bird_url, {
+            bird_name: b.name,
+            bird_counter: b.bird_counter
+        }).then(
+            function (response) {
+                // THIS happens much later, when the call returns.
+                // We need to find the bird with the right counter.
+                console.log("Got the response");
+                for (var bb of app.vue.birds) {
+                    console.log(bb.bird_counter, response.data.bird_counter);
+                    if (bb.bird_counter === response.data.bird_counter) {
+                        console.log("Found the bird");
+                        bb.id = response.data.bird_id;
+                        bb.bird_counter = null;
+                    }
+                }
+            });
     }
 
     // This contains all the methods that tie HTML to JS.

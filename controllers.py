@@ -31,6 +31,8 @@ from .common import db, session, T, cache, auth, logger, authenticated, unauthen
 from py4web.utils.url_signer import URLSigner
 from .models import get_user_email
 
+import time
+
 url_signer = URLSigner(session)
 
 @action('setup')
@@ -72,6 +74,10 @@ def my_post():
 @action('add_bird', method="POST")
 @action.uses(db, url_signer.verify())
 def add_bird():
+    time.sleep(1)
     print("Adding bird:", request.json["bird_name"])
     bird_id = db.birds.insert(bird_name=request.json["bird_name"])
-    return dict(bird_id=bird_id)
+    return dict(
+        bird_id=bird_id,
+        bird_counter=request.json['bird_counter'],
+    )
