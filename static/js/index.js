@@ -7,7 +7,7 @@ let app = {};
 // creates a Vue instance, and then initializes the Vue instance.
 let init = (app) => {
 
-    // This is the Vue data.
+    // This is the Vue data that is kept in synch.
     app.data = {
         // Complete as you see fit.
         birds: [],
@@ -33,15 +33,28 @@ let init = (app) => {
     };
 
     app.create_bird = function () {
+        // new_bird_name is the name of the new bird.
         // Before I can add the bird to the list, I need to send it
         // to the server to be inserted so that it gets an id.
-        axios.post(add_bird_url, {bird_name: new_bird_name}).then(function (response) {
-
-        });
+        axios.post(add_bird_url, {bird_name: app.vue.new_bird_name}).then(
+            function (response) {
+                // I create a bird object that I can insert in the bird list.
+                let b = {
+                    id: response.data.bird_id,
+                    name: app.vue.new_bird_name,
+                    count: 0,
+                }
+                // I insert it at the top of the list of bird.
+                app.vue.birds.unshift(b);
+                // I have to re-create the _idx attribute.
+                app.enumerate(app.vue.birds);
+                // Clear the input field now that the bird is added.
+                app.vue.new_bird_name = "";
+            });
 
     }
 
-    // This contains all the methods.
+    // This contains all the methods that tie HTML to JS.
     app.methods = {
         // Complete as you see fit.
         inc_count: app.inc_count,

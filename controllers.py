@@ -46,7 +46,8 @@ def index():
     return dict(
         # COMPLETE: return here any signed URLs you need.
         my_callback_url = URL('my_callback', signer=url_signer),
-        my_post_url = URL('my_post', signer=url_signer)
+        my_post_url = URL('my_post', signer=url_signer),
+        add_bird_url = URL('add_bird', signer=url_signer),
     )
 
 @action('my_callback')
@@ -62,7 +63,15 @@ def my_post():
     # The decoded json is available in request.json
     print("I received:", request.json)
     # Update the database.
-    db(db.birds.id == request.json["id"]).update(bird_count=request.json["count"])
+    db(db.birds.id == request.json["id"]).update(
+        bird_count=request.json["count"])
     # You can return anything, but I like to return "ok" if nothing
     # special is needed.
     return "ok"
+
+@action('add_bird', method="POST")
+@action.uses(db, url_signer.verify())
+def add_bird():
+    print("Adding bird:", request.json["bird_name"])
+    bird_id = db.birds.insert(bird_name=request.json["bird_name"])
+    return dict(bird_id=bird_id)
